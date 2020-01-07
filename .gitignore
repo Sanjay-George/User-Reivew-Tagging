@@ -1,2 +1,5 @@
-/datasets/*
+/datasets/adjectives/sent*/*
+/datasets/cars/*
+/datasets/opinosis/*
+/datasets/bikewale/*
 /docs/*
