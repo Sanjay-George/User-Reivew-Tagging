@@ -46,7 +46,7 @@ for i in range (0, len(dataset)):
                 neg_adjectives.add(word)
                 
                 
-                
+# WRITE TO SEP FILES
                 
                 
                 
