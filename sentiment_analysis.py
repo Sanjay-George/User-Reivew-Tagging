@@ -23,66 +23,26 @@ pos_adj = set(pd.read_csv("./datasets/adjectives/positive_adjectives.txt", error
 neg_adj = set(pd.read_csv("./datasets/adjectives/negative_adjectives.txt", error_bad_lines=False, sep="\t", quoting=3, header=None, names=['word']).word)
 
 
-#TODO : 
-#    1. find indices of all sentence separators in a review
-#    2. If any adjacent sentenceSep, then take only the last one
-#    3. Divide sentence into subsentences based on the indices 
-#    4. if any subsentence has just one word, merge with previous sub
-#    5. Do further analysis
+review = dataset['Review'][520]
+mod_review = ""
 
-#FOR ONE REVIEW
-review = re.sub('[^a-zA-Z.,;-]', ' ', dataset['Review'][520])
-
-# SEPARATE BY CONJUCTIONS
-# FIND SEP_INDICES IN WORDS LIST
-words = re.sub('[^a-zA-Z]', ' ', review)
-words = review.lower().split(" ")
-words = [w for w in words if len(w) > 1]   # remove whitespaces and single letters
-sep_indices = list([0])
-for i in range(len(words)):
-    if re.sub('[^a-zA-Z]', '', words[i]) in conjunctions:
-        sep_indices.append(i)
-sep_indices.append(len(words))
-
-# REMOVE ADJACENT SEPARATORS FROM SEP_INDICES LIST
-for i in range(len(sep_indices) - 1):
-    if sep_indices[i+1] <= sep_indices[i] + 1 :  # adjacent separators case
-        sep_indices.remove(sep_indices[i])
-
-# FORM SUB SENTENCES FROM SEP_INDICES LIST
-sub_sentences = []
-for i in range(len(sep_indices) - 1):
-    start = sep_indices[i]
-    end = sep_indices[i+1]
-    sentence = words[start:end]
-    sub_sentences.append(' '.join(sentence))
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+for char in review :
+    if char in set(separators):
+        mod_review = mod_review + "$"
+    else :
+        mod_review = mod_review + char
         
-# FURTHER PROCESSING ON SUBSENTENCES
-# SPLIT BY SEPARATORS 
-sub_sep_indices = []
-for sentence in sub_sentences:
-    for char in separators:
-        sub_sep_indices = sub_sep_indices + findOccurrences(sentence, char)
-        # inside this loop:
-        # remove ajdecent indcies
-        # form further sub sentences
 
+review = mod_review.split()
+mod_review = []
+for word in review:
+    if re.sub('a-zA-Z', '', word.lower()) in set(conjunctions):
+        mod_review.append("$")
+    else:
+        mod_review.append(word)
 
-
-
-def findOccurrences(string, char):
-    return [i for i, letter in enumerate(string) if letter == char]
-
+review = ' '.join(mod_review)
+sub_sentences = [sentence for sentence in review.split("$") if len(sentence.strip()) > 1]
 
 
 

@@ -4,11 +4,10 @@ import pandas as pd
 import re
 import nltk
 from nltk.corpus import stopwords
-from nltk.stem.porter import PorterStemmer
 from nltk.corpus import wordnet as wn
 
 #dataset = pd.read_csv("./datasets/bikewale/combined.txt", sep="\t", quoting=3)
-dataset = pd.read_csv("./datasets/bikewale/Reviews.csv", error_bad_lines=False,sep="\t", quoting=3)
+dataset = pd.read_csv("./datasets/bikewale/Reviews.csv", error_bad_lines=False, sep="\t", quoting=3)
 dataset = dataset.dropna().reset_index(drop=True)
 
 ## ONE TIME DOWNLOAD
@@ -38,9 +37,7 @@ for i in range (0, len(dataset)):
     for word in review:
         if len(wn.synsets(word, pos='a')) == 0 and len(wn.synsets(word, pos='r')) == 0:   # remove adjectives and adverbs
             review_temp.append(word)
-#        else:
-#            if (len(wn.synsets(word, pos='n')) > 0):
-#                review_temp.append(word)
+
     review = review_temp         
     review = ' '.join(review)
     corpus.append(review)   
